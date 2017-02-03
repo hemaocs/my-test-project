@@ -1,0 +1,14 @@
+# Allow any files or directories that exist to be displayed directly
+RewriteCond ${REQUEST_URI} ^.+$
+RewriteCond %{REQUEST_FILENAME} \.(gif|jpe?g|png|js|css|swf|php|ico|txt|pdf|xml)$ [OR]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond %{REQUEST_FILENAME} -l
+RewriteRule ^ - [L]
+<IfModule mod_rewrite.c>
+	IndexIgnore *.zip *.jpg *.gif
+    RewriteEngine on
+	RewriteRule    ^$    public/index.php    [L]
+    RewriteRule    (.*) public/index.php/$1    [L]
+	
+ </IfModule>

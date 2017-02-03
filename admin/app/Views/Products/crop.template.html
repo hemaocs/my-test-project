@@ -1,0 +1,48 @@
+<div id="crop-modal" class="modal mdl-layout__content image-crop-included" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+   <div class="component"  id="team-image-content">
+		<div class="overlay">
+			<div class="overlay-inner">
+			</div>
+		</div>
+		<img id="team-image" class="resize-image" src="{{ upload_image.url }}" alt="image for resizing">
+		<button id="crop_image_upload" data-toggle="modal" class="btn-crop js-crop">Crop<img class="icon-crop" src="{{dirName}}/public/assets/img/crop.svg" data-dismiss="modal"></button>
+	</div>
+</div>	
+<link rel="stylesheet" type="text/css" href="{{dirName}}/public/assets/css/resizecrop/normalize.css" />
+<link rel="stylesheet" type="text/css" href="{{dirName}}/public/assets/css/resizecrop/demo.css" />
+<link rel="stylesheet" type="text/css" href="{{dirName}}/public/assets/css/resizecrop/component-league.css" />
+	
+<script src="{{dirName}}/public/assets/js/resizecrop/jquery-2.1.1.min.js"></script>
+<script src="{{dirName}}/public/assets/js/bootstrap.min.js"></script>
+<script src="{{dirName}}/public/assets/js/resizecrop/component.js"></script>
+<script type="text/javascript" >
+	$('#crop-image-view').attr("src",'{{ upload_image.url }}');
+	$('#crop_image').val('{{ upload_image.image_path }}');
+	$('#frm_image').val('{{ upload_image.image_name }}');
+	function doUploadImageCropSave(data_val){ alert(data_val);
+		var dataString = 'data_val='+data_val;
+		$.ajax({
+			url: "{{dirName}}/products/crop", // point to server-side PHP script 
+			type: "POST",
+			data: dataString,
+			cache: false,
+			//dataType: 'json',
+			success: function(data){
+				if (data) {
+					var image = JSON.parse(data);
+					$('#frm_image').val(image["image_name"]);
+					$('#frmHiddenImg').val('');
+					$('#crop-image-view').attr("src",image["image_url"]);
+					$( "#view-orginal-image-button").css({display: 'block'});
+					$( "#crop-image-view").css({display: 'block'});
+					$('#crop-modal').modal('toggle');
+					$('.modal-backdrop').remove();
+					$('body').removeClass('modal-open');
+					
+					
+				}
+			}
+		 });
+
+	}	 
+</script>

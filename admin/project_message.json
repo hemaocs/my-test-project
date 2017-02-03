@@ -1,0 +1,10 @@
+{ 
+  "messages": {
+    "1": { 
+      "chat_first": "Hey person!"
+    },
+    "2": {
+      "chat_second": "Yo!"
+    }
+  } 
+}

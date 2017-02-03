@@ -1,0 +1,153 @@
+{% extends "template.html" %}
+{% set active_page = "categories" %}
+{% set section_name = "categories"|trans %}
+{% set section_sub_name = "list"|trans %}
+{% set section_icon_name = "categories" %}
+{% set page_header = ('categories') | trans %}
+
+{% block title %}Cat&eacute;agories{% endblock %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+    {% if flash.success is not null %}
+		<div class="mdl-cell mdl-cell--10-col alert alert-success alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{{flash.success}}
+		</div>
+	{% endif %}
+      <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <a id="new-user" class="btn btn-primary btn-md" href="{{dirName_lang}}/categories/add">{{ "add_category"|trans }}</a>
+                  <h3 class="box-title">{{'categories'|trans}}</h3>                 
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                	<form name="filter-form" id="filter-form" method="post" onsubmit="return doFilter()" >
+                		{% if categories %}
+                  	<table id="categoryList" class="table table-bordered">
+                        <thead>
+							<tr>
+								<th>{{'id'|trans}}</th>
+								<th>{{'name'|trans}}</th>
+								<th class="action">{{'image'|trans}}</th>
+								<th class="action">{{'actions'|trans}}</th>
+							</tr>
+                        </thead>
+                        <tbody>
+							{% for cat in categories %}
+							<tr>
+								<td>{{ cat.id }}</td>
+								<td>{{ cat.name }}</td>
+								<td>
+                        			{% if cat.image %} 
+                        			<img src="{{ cat.image }}" alt="{{ cat.name }}" class="img-circle" height="80" width = "80"/> 
+                        			{% else %} 
+                        			<img src="{{dirName}}/public/assets/img/no_icon.jpg" class="img-circle" alt="Category Image" height="80" width = "80"/> 
+                        			{% endif %}
+                        		</td>
+								<td>
+									<a href="{{dirName_lang}}/categories/view/{{ cat.id }}"><span class="btn btn-primary btn-xs">{{ "see"|trans }}</span></a>
+
+									<a href="{{dirName_lang}}/categories/update/{{ cat.id }}"><span class="btn btn-primary btn-xs">{{ "edit"|trans }}</span></a>
+
+									<a href="#" data-id="{{ cat.id }}" data-toggle="modal" data-target="#delete-modal"><span class="btn btn-danger btn-xs">{{ "delete"|trans }}</span></a>
+								</td>
+							 </tr>
+ 							 {% endfor %}
+                        </tbody>
+                   	</table>
+                   	</div><!-- /.box-body -->
+                   	{%else %}	
+						   	  <tr>
+						   	  	<td colspan="8" style="text-align:center;">{{ "no_records_found"|trans }}</td>
+						   	  </tr>
+					{%endif %}		 
+                
+                </form>
+              </div><!-- /.box -->
+            </div>
+          </div>
+    </section>
+
+<!-- Delete a user modal -->
+<div class="modal modal-danger" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display:none;">
+	<div class="modal-dialog" >
+		<div class="modal-content">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+		    <h4 class="modal-title">{{ "delete_category"|trans }}</h4>
+		  </div>
+		  <div class="modal-body">
+		    <p>{{ "category_confirm_delete"|trans }}</p>
+		  </div>
+		  <div class="modal-footer">
+		    <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">{{ "cancel"|trans }}</button>
+		    <a type="button" id="delete-button" href="delete/id"><button type="button" class="btn btn-outline pull-left">{{ "delete"|trans }}</button></a>
+		  </div>
+		</div><!-- /.modal-content -->
+	</div>
+</div>
+
+<style type="text/css">
+.pagination .text {
+	float:left;
+	padding:6px 12px;
+	line-height:1.42857;	
+}
+.pagination #frmSetLimit {
+	float:left;
+	margin-right:10px;
+	padding:6px 12px;
+	line-height:1.42857;
+	border:1px solid #ddd;
+}
+</style>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	 $('#delete-modal').on('show.bs.modal', function (e) {
+		var cat_id = $(e.relatedTarget).attr('data-id');
+		console.log(cat_id);
+		var delete_url = "{{ base_url }}categories/delete/"+cat_id;
+		$('#delete-button').attr("href", delete_url);
+	 });
+	 
+	function doSelectFilter(val){
+		$('.filter-field').hide();
+		$('.filter-field').val();
+	 	$('.filter-'+val).show();
+	}
+
+
+	function doFilter() {
+		var limit = $('#frmSetLimit').val();
+		$('#frm_filter').attr('href','{{dirName_lang}}/categories/page/1/limit/'+limit);
+	}
+
+	
+ });
+ 
+ function doFilterLimit() { 
+	var limit = $('#frmSetLimit').val();
+	if(limit!='') {
+		$(location).attr('href', '{{dirName_lang}}/categories/page/1/limit/'+limit);
+	} else{
+		$(location).attr('href', '{{dirName_lang}}/categories');
+	}	
+}
+
+$(function () {
+	$('#categoryList').DataTable({
+		"paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false
+	});
+});
+</script>
+
+{% endblock %}

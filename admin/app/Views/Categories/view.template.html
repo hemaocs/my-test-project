@@ -1,0 +1,184 @@
+{% extends "template.html" %}
+{% set active_page = "categories" %}
+{% set page_header = ('add_category') | trans %}
+{% set section_name = "categories"|trans %}
+{% block title %}{{ "add_category"|trans }}{% endblock %}
+{% block content %}
+	 <section class="content">
+		<div class="row">
+			
+			<div class="col-lg-3 col-xs-6">
+				<div class="box box-primary">
+	   
+	                  <div class="box-body box-profile" style= "text-align: center;" >
+	                  
+                        {% if categories.image %} 
+	                        <img src="{{ categories.image }}" id="picture_img" alt="{{categories.name}}" class="profile-user-img img-responsive img-circle" style="width:100px;height:100px" />
+	                    {% else %}
+	                        <img src="{{dirName}}/public/assets/img/no_icon.jpg" id="picture_img" alt="{{categories.name}}" class="img-circle" style="width:100px;height:100px"  />
+                        {% endif %}
+                        
+                      	<div class="profile-username text-center">
+	                    	{{categories.name}}
+	                    </div>
+	          
+	                  </div>
+	                
+              	</div>
+			</div>
+
+			<div class="col-lg-9 col-xs-6">
+				<div class="box box-primary">
+	                <div class="box-header with-border" style="margin-bottom: 10px">
+	                  <h3 class="box-title">{{"list_of_category_product"|trans}}</h3>
+	                </div>
+	    
+	                <!-- /.box-header -->
+	                {% if products %}
+	                <table class="table table-bordered" id="prodCatList" >
+                    {% else %}
+	               	<table class="table table-bordered" >
+                    {% endif %}
+                        <thead>
+                            <tr>
+                                <th>{{'id'|trans}}</th>
+								<th>{{'name'|trans}}</th>
+								<th class="action">{{'image'|trans}}</th>
+                            </tr>
+	                    </thead>
+	                     <tbody id="productsList">
+							{% for prod in products %}
+							<tr>
+								<td>{{ prod.product_id }}</td>
+								<td>{{ prod.name }}</td>
+								<td>
+                        			{% if prod.image %}
+                        			<img src="{{ prod.image }}" alt="{{ prod.name }}" class="img-circle"/> 
+                        			{% else %}
+                        			<img src="{{dirName}}/public/assets/img/no_icon.jpg" class="img-circle" alt="{{ prod.name }}"/> 
+                        			{% endif %}
+                        		</td>
+							</tr>
+							{% else %}	
+						   	  <tr>
+						   	  	<td colspan="8" style="text-align:center;">{{"no_records_found"|trans}}</td>
+						   	  </tr>
+		                    {% endfor %}
+						
+                        </tbody>
+                   	</table>
+
+              	</div>
+			</div>
+		</div>
+	</section>
+<style>.image-sec {
+    position: absolute;
+    top: 25px;
+	left:25px;
+}
+.icon_but {
+    float: left;
+    height: 35px;
+    margin-right: 10px;
+    padding: 0 !important;
+	padding:0 10px;   
+}
+.btn-primary {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    color: #fff;
+}
+</style>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="{{dirName}}/public/assets/js/material.min.js"></script>
+ <script src="{{dirName}}/public/assets/js/bootstrap.min.js"></script>-->
+<script language="javascript" >
+$(document).ready(function(){
+    $('#frm_submit').click(function(){
+        var bSubmit = true;
+        $("input.required").each(function(){
+            var txtAttrb = $(this).val();
+            if(txtAttrb.length== 0)
+                {
+                   $(this).addClass("error-msg");
+                   bSubmit = false;
+            }
+        });
+		
+        if(bSubmit !== true)
+		{
+			return false;
+		}
+
+    });
+});
+
+function doCheckValidation(field) {
+	var element = $('#'+field);
+	if(element.val().length == 0 || element.val() == 'Select') {
+		element.addClass("error-msg");
+	} else {
+		element.removeClass("error-msg");
+	}
+}
+
+function readURL(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			$('#picture_img').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+
+jQuery(document).ready(function() {
+	jQuery('#add_icon').click(function(e){
+		jQuery('#picture').click();
+	});
+	$("#picture").change(function(){
+		readURL(this);
+	});
+});
+
+function doSelectFilter(){
+  var key = $('#product_filter').val();
+  var catId = "{{categories.id}}";
+  //Ajax request for getting product information (product name, category, shop, inventory)
+	if (key != '') {
+        $.ajax({
+			url: catId+"/search/"+key,
+			type: 'GET',
+			//dataType: "json"
+		}).done(function( data ) {
+			var obj = JSON.parse(data);
+			var content = "";
+			if((obj.length) > 0){
+                for(var t=0; t < obj.length; t++){
+                    content += '<tr><td>'+obj[t]["id"]+'</td><td>'+obj[t]["name"]+'</td><td><img src="'+obj[t]["image"]+'" alt="'+obj[t]["name"]+'" class="img-circle" height="45" width="45"/></td></tr>';
+                }
+			}
+			$('#productsList').html(content);
+		})
+		.fail(function( data ) {
+			console.log('Request failed');
+		})
+	} else {
+		alert('Please enter search values.');
+	}
+}
+
+$(function () {
+	$('#prodCatList').DataTable({
+		"paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": false,
+        "autoWidth": false
+	});
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{
+	"require": {
+		"php": ">=5.5.0",
+		"monolog/monolog": "1.11.*@dev",
+		"slim/slim": "2.*",
+		"twig/twig": "~1.0",
+        "slim/views": "~0.1",
+		"symfony/translation": "2.7.3",
+    	"symfony/twig-bridge": "2.7.3",
+		"ircmaxell/password-compat": "^1.0",
+		"league/fractal": "~0.12",
+		"phansys/getid3": "2.*@dev",
+		"faisalman/simple-excel-php": "0.3.*",
+		"appsolute/push": "dev-master",
+		"paragraph1/php-fcm": "*"
+	},
+	"autoload": {
+		"files": [
+			"libs/Redbean4.2.3/rb.php"
+		],
+		"psr-4": {
+			"Appsolute\\Config\\": "config",
+			"Appsolute\\Backend\\": "app",
+			"Appsolute\\Api\\": "api",
+			"Appsolute\\Backend\\Classes\\": "app/Classes",
+			"Appsolute\\Backend\\Controllers\\": "app/Controllers",
+			"Appsolute\\Backend\\Middlewares\\": "app/Middlewares",
+			"Appsolute\\Backend\\Models\\": "app/Models",
+			"Appsolute\\Backend\\Routes\\": "app/Routes",
+			"Appsolute\\Backend\\Views\\": "app/Views"
+	    }
+	},
+	"repositories": [
+		{
+            "type": "vcs",
+			"url": "https://appsolute-git.fr/kendryck/php-push-notification.git"
+        }
+	]
+}

@@ -1,0 +1,231 @@
+{% extends "template.html" %}
+{% set active_page = "products" %}
+{% set section_name = "Products"|trans %}
+{% set section_sub_name = "list"|trans %}
+{% set section_icon_name = "products" %}
+{% set page_header = ('products') | trans %}
+
+{% block title %}Products{% endblock %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+    {% if flash.success is not null %}
+		<div class="mdl-cell mdl-cell--10-col alert alert-success alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{{flash.success}}
+		</div>
+	{% endif %}
+      <div class="row">
+            <div class="col-xs-12"> 
+            	
+              <div class="box">
+                <div class="box-header">
+                   <div style="width:80%;float: left">
+                   	   <a id="new-user" class="btn btn-primary btn-md" href="{{dirName_lang}}/products/add">{{ "add_product"|trans }}</a>
+                 	   <h3 class="box-title">{{'Products'|trans}}</h3>
+                   </div>
+                  
+                {% if categories %}
+	                    <div class="form-group" style="width: 20%;float:left">
+	                      <label for="frmCategoryId{{cat.id}}" style="width: 30%;float:left" >{{ "category"|trans }}: </label>
+	                      <select class="form-control" id="frmCategoryId" name="frmCategoryId[]" style="width: 70%;float: left" onChange="searchProducts(this.value);">
+	                        <option value="0">Choose</option>
+							{% for cat in categories %}
+						    	<option value="{{cat.id}}" id="frmCategoryId" name="frmCategoryId[{{cat.id}}]" {% if cat.id == filter.filterby %} selected="selected" {% endif %}>{{ cat.name }}</option>
+							{% endfor %}
+	                      </select>
+	                    </div>
+	            {% endif %} 
+	            </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                	<form name="filter-form" id="filter-form" method="post" >
+                	<input type="hidden" name="filterby" id="filterby" value="filterby">	
+                	{% if products %}
+                  	<table id="productList" class="table table-bordered">
+                  	{% else %}
+                    <table class="table table-bordered">
+                  	{% endif %}
+                        <thead>
+							<tr>
+								<th>{{'id'|trans}}</th>
+								<th>{{'name'|trans}}</th>
+								<th>{{'category'|trans}}</th>
+								<th class="action">{{'image'|trans}}</th>
+								<th class="action">{{'isdefault'|trans}}</th>
+								<th class="action">{{'actions'|trans}}</th>
+							</tr>
+                        </thead>
+                        <tbody>
+							{% for prod in products %}
+							<tr>
+								<td>{{ prod.id }}</td>
+								<td>{{ prod.name }}</td>
+								<td>{{ prod.category }}</td>
+								<td>
+                        			{% if prod.image %} 
+                        			<img src="{{ prod.image }}" alt="{{ prod.name }}" class="img-circle" width="80" height="80"/> 
+                        			{% else %} 
+                        			<img src="{{dirName}}/public/assets/img/no_icon.jpg" class="img-circle" alt="Product Image" width="80" height="80"> 
+                        			{% endif %}
+                        		</td>
+                        		<td id="default{{ prod.id }}">
+                        			{% if prod.is_default == 1 %}  
+                        			<img src="{{dirName}}/public/assets/img/tick.png" alt="{{ prod.is_default }}" class="img-circle" title="{{ prod.name }}" height="20" width="20" style="cursor:pointer;" data-id="{{ prod.id }}" data-toggle="modal" data-target="#default-modal"/>
+                        			{% else %} 
+                        			<img src="{{dirName}}/public/assets/img/cross.png" alt="{{ prod.is_default }}" class="img-circle" title="{{ prod.name }}" height="20" width="20" style="cursor:pointer;" data-id="{{ prod.id }}" data-toggle="modal" data-target="#default-modal"/>
+                        			{% endif %}
+                        		</td>
+								<td>
+									<!-- <a href="{{dirName_lang}}/products/view/{{ prod.id }}"><span class="btn btn-primary btn-xs">{{ "see"|trans }}</span></a>-->
+									<a href="{{dirName_lang}}/products/update/{{ prod.id }}"><span class="btn btn-primary btn-xs">{{ "edit"|trans }}</span></a>
+									<a href="#" data-id="{{ prod.id }}" data-toggle="modal" data-target="#delete-modal"><span class="btn btn-danger btn-xs">{{ "delete"|trans }}</span></a>
+								</td>
+							 </tr>
+							 {% else %}	
+						   	  <tr>
+						   	  	<td colspan="8" style="text-align:center;">{{ "no_records_found"|trans }}</td>
+						   	  </tr>
+							 {% endfor %}
+                        </tbody>
+                   	</table>                
+                </form>
+              </div><!-- /.box -->
+            </div>
+          </div>
+      </div>
+    </section>
+
+<!-- Delete a user modal -->
+<div class="modal modal-danger" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display:none;">
+	<div class="modal-dialog" >
+		<div class="modal-content">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+		    <h4 class="modal-title">{{ "delete_product"|trans }}</h4>
+		  </div>
+		  <div class="modal-body">
+		    <p>{{ "product_confirm_delete"|trans }}</p>
+		  </div>
+		  <div class="modal-footer">
+		    <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">{{ "cancel"|trans }}</button>
+		    <a type="button" id="delete-button" href="delete/id"><button type="button" class="btn btn-outline pull-left">{{ "delete"|trans }}</button></a>
+		  </div>
+		</div><!-- /.modal-content -->
+	</div>
+</div>
+
+<!-- Change default modal -->
+<div class="modal" id="default-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="display:none;">
+	<div class="modal-dialog" style="width:350px;" >
+		<div class="modal-content">
+		  <div class="modal-body">
+		    <p id="changeText" style="text-align:center;"></p>
+		  </div>
+		  <div class="modal-footer">
+		    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">No</button>
+		    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal" id="default-button">Yes</button>
+		    <input type="hidden" name="frmProdId" id="frmProdId" value="" />
+		    <input type="hidden" name="frmDefault" id="frmDefault" value="" />
+		    <input type="hidden" name="frmTitle" id="frmTitle" value="" />
+		  </div>
+		</div><!-- /.modal-content -->
+	</div>
+</div>
+
+<style type="text/css">
+.pagination .text {
+	float:left;
+	padding:6px 12px;
+	line-height:1.42857;	
+}
+.pagination #frmSetLimit {
+	float:left;
+	margin-right:10px;
+	padding:6px 12px;
+	line-height:1.42857;
+	border:1px solid #ddd;
+}
+</style>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	 $('#delete-modal').on('show.bs.modal', function (e) {
+		var prod_id = $(e.relatedTarget).attr('data-id');
+		console.log(prod_id);
+		var delete_url = "{{ base_url }}products/delete/"+prod_id;
+		$('#delete-button').attr("href", delete_url);
+	 });
+
+	 $('#default-modal').on('show.bs.modal', function (e) {
+		var prodId = $(e.relatedTarget).attr('data-id');
+		var isDefault = $(e.relatedTarget).attr('alt');
+		var title = $(e.relatedTarget).attr('title');
+		if(isDefault == 1){
+			msg = 'Are you sure remove this product \«'+title+'\» from default list ?';
+		} else {
+			msg = 'Are you sure to make this product \«'+title+'\» as default ?';
+		}
+
+		$('#frmProdId').val(prodId);
+		$('#frmDefault').val(isDefault);
+		$('#frmTitle').val(title);
+		$('#changeText').html(msg);
+	 });
+
+	 $( "#default-button" ).click(function() {
+	     var prodId = $('#frmProdId').val();
+		 var isDefault = $('#frmDefault').val();
+		 var title = $('#frmTitle').val();
+		 var status;
+		 if (isDefault == 1) {
+			 status = 0;
+		 } else {
+		     status = 1;
+		 }
+
+		 $.ajax({
+			url: "products/changeStatus/"+status+"/"+prodId,
+			type: 'POST',
+			//dataType: "json"
+		 }).done(function( data ) {
+			var content = "";
+			if (data == 1) {
+                content += '<img src="{{dirName}}/public/assets/img/tick.png" alt="'+data+'" class="img-circle" title="'+title+'" height="20" width="20" style="cursor:pointer;" data-id="'+prodId+'" data-toggle="modal" data-target="#default-modal"/>';
+	        } else {
+                content += '<img src="{{dirName}}/public/assets/img/cross.png" alt="'+data+'" class="img-circle" title="'+title+'" height="20" width="20" style="cursor:pointer;" data-id="'+prodId+'" data-toggle="modal" data-target="#default-modal"/>'
+	        }
+			$('#default'+prodId+'').html(content);
+		 })
+		 .fail(function( data ) {
+			console.log('Request failed');
+		 })
+	 });
+	 
+ });
+
+
+$(function () {
+	$('#productList').DataTable({
+		"paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false
+	});
+});
+
+function searchProducts(filterby) {
+	if (filterby != '') {
+		if (filterby != 0) {
+            $(location).attr('href','{{dirName_lang}}/products/filter/'+filterby);
+	    } else {
+	    	$(location).attr('href','{{dirName_lang}}/products');
+	    }
+	}
+}
+
+</script>
+
+{% endblock %}

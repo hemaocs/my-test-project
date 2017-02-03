@@ -1,0 +1,59 @@
+ <header class="main-header">
+        <!-- Logo -->
+        <a href="index2.html" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <!-- <span class="logo-mini"><img src="{{dirName}}/public/assets/img/vagone-title.png" height="auto" width="45" class="" alt="User Image"></span> -->
+          <!-- logo for regular state and mobile devices -->
+          <!-- <span class="logo-lg"><img src="{{dirName}}/public/assets/img/vagone-title.png" height="45" width="auto" class="" alt="User Image"></span> -->
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-user"></i><span class="hidden-xs text-capitalize">{{ session.user.firstname }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="user-header">
+                    <img style="background:#fff;" src="{{dirName}}/public/assets/img/vagone-logo.png" class="img-circle" alt="User Image">
+                    <p class="text-capitalize">
+                      {{ session.user.firstname }}
+                    </p>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a disabled href="#" class="btn btn-default btn-flat">Profile</a>
+                    </div>
+                    <div class="pull-right">
+                      <a href="{{dirName_lang}}/logout" class="btn btn-default btn-flat">Logout</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      
+ <!-- <header class="mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+	<div class="mdl-layout__header-row">
+	   <span class="mdl-layout-title">{{ page_header }}</span>
+	   <div class="mdl-layout-spacer"></div>
+	   <button id="admin-menu" class="mdl-button mdl-js-button mdl-button--icon">
+		  <i class="material-icons">settings</i>
+	   </button>
+	   <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu m	dl-js-ripple-effect" for="admin-menu">
+		  <li disabled class="mdl-menu__item">{{ session.user.firstname }}</li>
+		  
+		  <li><hr /></li>
+		  <li class="mdl-menu__item"><i class="material-icons">person</i>My account</li>
+          <li class="mdl-menu__item"><i class="material-icons">power_settings_new</i><a style="text-decoration:none; color:rgba(0, 0, 0, 0.87);" href="{{dirName_lang}}/logout">Logout</a></li>
+	   </ul>
+	</div>
+ </header> -->

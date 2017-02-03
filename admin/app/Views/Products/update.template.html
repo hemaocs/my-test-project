@@ -1,0 +1,237 @@
+{% extends "template.html" %}
+{% set active_page = "products" %}
+{% set page_header = ('edit_product') | trans %}
+{% set section_name = "Products"|trans %}
+{% set section_sub_name = "modifier"|trans %}
+{% set section_icon_name = "products" %}
+
+{% block title %}{{ "edit_product"|trans }}{% endblock %}
+{% block content %}
+	<section class="content">
+		<div class="row">
+			<div class="col-lg-8 col-xs-6">
+				{% if flash.errors is not null %}
+        		{% for error in flash.errors %}
+        			<div class="alert alert-danger alert-dismissable" style="text-align:left">
+	                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+	                    <h4>	<i class="icon fa fa-check"></i> Alert!</h4>
+	                    {{error}}
+	                </div>
+        		{% endfor %}
+        	{% endif %}		
+				<div class="box box-primary">
+	                <div class="box-header with-border" style="text-align:left">
+	                  <h3 class="box-title">{{ "edit_product"|trans }}</h3>
+	                </div><!-- /.box-header -->
+	                <!-- form start -->
+	                <form action="" id="newproduct"  method="POST" enctype="multipart/form-data">
+	                  <div class="box-body">
+
+	                  	<!-- <div class="form-group" style="float:left;width:100%">
+	                        <div id="fileupload-name" class="mdl-textfield mdl-js-textfield" style="text-align:left;">
+		                        <label class="mdl-checkbox__label" for="fileupload">
+		                        <p id="filepath" class="mdl-checkbox__label">Click here to add a image<span style="font-size:12px; font-style:italic"><br/> (minimum size :456px by 456px)</span></p>
+		                        <input id="fileupload" type="file" name="picture" class="mdl-checkbox__input" accept="image/*" style="visibility:hidden;">
+		                        {% if products.image %} 
+	                            <img src="{{ products.image }}" id="crop-image-view" alt="{{products.name}}" width="50" height="50" class="img-circle" style="float:left;margin-right:15px;margin-top: -10px" />
+	                            {% else %}
+	                            <img src="{{dirName}}/public/assets/img/no_icon.jpg" id="crop-image-view" alt="{{products.name}}" width="50" height="50" class="img-circle" style="float:left;margin-right:15px;margin-top: -10px" />
+	                            {% endif %}
+	                          
+	                             <a data-id="{{ products.id }}" id="view-orginal-image-button" data-toggle="modal" style="display:none; right:2px;width:30px;float: left" data-target="#crop-modal" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" href="#"><i class="material-icons">edit</i></a>
+	                        	</label>
+	                           
+                        	</div>
+                      	</div> -->
+                      	<div class="form-group" style="float:left;width:100%">
+	                       <!-- <label style="float:left; padding:0 25px">{{ "image"|trans }}</label> -->
+	                        <input id="picture" type="file" name="picture" style="visibility:hidden;">
+	                        {% if products.image %} 
+                            <img src="{{ products.image }}" id="picture_img" alt="{{products.name}}" width="50" height="50" class="img-circle" style="float:left;margin-right:15px;" />
+                            {% else %}
+                            <img src="{{dirName}}/public/assets/img/no_icon.jpg" id="picture_img" alt="{{products.name}}" width="50" height="50" class="img-circle" style="float:left;margin-right:15px;" />
+                            {% endif %}
+                            <button name="add_icon" id="add_icon" class="btn btn-primary icon_but pull-left" type="button" style="margin-top:6px; padding: 6px 12px !important;">Add image</button>
+                      	</div>
+	                  	<div class="form-group" style="float:left;width: 100%">
+	                      <label for="name" style="float:left">{{ "name"|trans }}</label>
+	                      <input value="{{products.name}}" type="text" class="form-control" placeholder='{{ "name"|trans }}' id="name" name="name" onblur="doCheckValidation('name');">
+	                    </div>
+                        
+                        {% if parentChildCats %}
+		                    <div class="form-group pull-left" style="float:left;text-align:left;width:100%;">
+		                        <label for="frmCategoryId" >{{ "Category"|trans }}: </label>
+		                        <select class="form-control" id="frmCategoryId" name="frmCategoryId" onblur="doCheckValidation('frmCategoryId')" style="width:250px;" >
+		                      	<option value="0">Please Select</option>
+								{% for cats in parentChildCats %}
+								    <option {% if cats.type == 'child' %} style="text-indent:20px;" {% endif %} value="{{cats.id}}" {% if category.category_id == cats.id %} selected="selected" {% endif %}>{{ cats.name }}</option>
+								{% endfor %}
+		                        </select>
+		                    </div>
+	                    {% endif %}
+
+	                    <div class="form-group" style="float:left;width:100%;margin-top:10px;">
+	                        <div class="md-checkbox" style="margin-left:10px;">
+                                <input type="checkbox" class="md-check" name="is_default" id="is_default" onblur="doCheckValidation('is_default');" {% if products.is_default == '1' %} checked="checked" {% endif %}>
+                                <label for="is_default">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box" style="border-radius:0px;"></span>
+                                {{ "Is default"|trans }} </label>
+                            </div>
+	                    </div>
+	                    <!-- {% if seasons %}
+	                    <div class="form-group" style="float:left;width:100%;">
+	                    	<label style="float:left;width:100%;margin-bottom:13px;">{{ "seasons"|trans }}: </label>
+	                    	{% for season in seasons %}
+	                        <div class="md-checkbox" style="margin-left:10px;">
+                                <input type="checkbox" class="md-check" name="season[]" id="season{{ season.id }}" value="{{ season.id }}" {% for seasonProd in seasonProds %} {% if seasonProd.season_id == season.id %} checked="checked" {% endif %} {% endfor %}>
+                                <label for="season{{ season.id }}">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box" style="border-radius:0px;"></span>
+                                {{ season.name }} </label>
+                            </div>
+                            {% endfor %}
+	                    </div>
+	                    {% endif %} -->
+	                    <input type="hidden" id="frmHiddenImg" name="frmHiddenImg" value="{{ categories.image_name }}" />
+					  <input type="hidden" name="frm_image" id="frm_image" value="" />
+					  <input type="hidden" id="crop_image" name="frm_image_original" value="{{ upload_image.image_path }}"/>
+	                  <div class="box-footer" style="float:left;width:100%;">
+	                  	<input type="hidden" name="frmHiddImg" id="frmHiddImg" value="{{products.imgName}}"> 
+	                    <button class="btn btn-block btn-success btn-lg" id="frm_submit_pro" name="frm_submit_pro" type="submit">{{ "submit"|trans }}</button>
+	                  </div>
+	                </form>
+              	</div>
+			</div>
+			
+		</div>
+	</section>
+
+<div id="crop-frame"></div>
+<script src="{{dirName}}/public/assets/js/resizecrop/jquery-2.1.1.min.js"></script>
+<script src="{{dirName}}/public/assets/js/material.min.js"></script>
+<script src="{{dirName}}/public/assets/js/bootstrap.min.js"></script>
+<script src="{{dirName}}/public/assets/js/lightbox.js"></script>
+<script type="text/javascript">
+	 
+	$('#fileupload').on('change', function() {
+	 	var file_data = $('#fileupload').prop('files')[0];   
+	    var form_data = new FormData();         
+    	var _URL = window.URL || window.webkitURL;
+		var file = file_data;
+	    var img = new Image();
+		var fail;
+	    img.onload = function() {
+	   		if(img.width>1500 && img.height>1000) {
+				alert("It is too large for product image!");  return false;
+			} else if(img.width<456 && img.height<456) {
+				alert("Image width and height should be 456px or greaterthan 456px"); return false;
+			} else {
+				$( "#filepath" ).html(file.name);
+				$( "#frm_image_original" ).val(file.name);
+				$( "#filepath" ).css({ color: "black" });
+		 		$( "#view-orginal-image-button").css({display: 'block'});
+				$( "#crop-image-view").css({display: 'block'});
+				$('#crop-image-view').attr("src",'{{dirName}}/public/assets/img/loader.gif');
+				
+		 
+				form_data.append('file', file_data);
+				$.ajax({
+					url: '../upload', 
+					dataType: 'text', 
+					cache: false,
+					contentType: false,
+					processData: false,
+					type: 'post',
+					data: form_data, 
+					success: function(php_script_response){	
+						$('#crop-frame').html(php_script_response);
+						
+					}
+				});
+			}
+		}
+		img.src = _URL.createObjectURL(file);
+	});
+</script>
+
+	
+<style>
+.image-sec {
+    position: absolute;
+    top: 25px;
+	left:25px;
+}
+.icon_but {
+    float: left;
+    height: 35px;
+    margin-right: 10px;
+	padding:0 10px!important;
+}
+.btn-primary {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    color: #fff;
+}
+</style>
+<script language="javascript" >
+$(document).ready(function(){
+    $('#frm_submit_pro').click(function(){
+        var bSubmit = true;
+        $("input.required").each(function(){
+            var txtAttrb = $(this).val();
+            if(txtAttrb.length== 0)
+                {
+                   $(this).addClass("error-msg");
+                   bSubmit = false;
+            }
+        });
+		
+        if(bSubmit !== true)
+		{
+			return false;
+		}
+    });
+});
+
+function doCheckValidation(field) {
+	var element = $('#'+field);
+	if(element.val().length == 0 || element.val() == 'Select') {
+		element.addClass("error-msg");
+	} else {
+		element.removeClass("error-msg");
+	}
+}
+
+$('#refuse').click(function() {
+	$('#refuse-reasons').slideToggle();
+});
+
+$('#valdiate').click(function() {
+	$('#refuse-reasons').hide();
+});
+
+function readURL(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			$('#picture_img').attr('src', e.target.result).attr('style', 'height:50px !important;float:left;margin-right:15px;').attr('width', 50);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+
+jQuery(document).ready(function() {
+	jQuery('#add_icon').click(function(e){
+		jQuery('#picture').click();
+	});
+	$("#picture").change(function(){
+		readURL(this);
+	});
+});
+
+</script>
+
+{% endblock %}

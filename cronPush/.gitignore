@@ -1,0 +1,9 @@
+#Ignore these directories
+vendor/*
+tmp/*
+upload/*
+logs/*
+docs/site/
+
+# Ignore these files
+!readme.md

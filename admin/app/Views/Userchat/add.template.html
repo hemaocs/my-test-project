@@ -1,0 +1,127 @@
+{% extends "template.html" %}
+{% set active_page = "userchats" %}
+{% set page_header = ('addchat') | trans %}
+{% set section_name = "userchat"|trans %}
+{% block title %}{{ "addchat"|trans }}{% endblock %}
+{% block content %}
+	 <section class="content">
+		<div class="row">
+			
+			<div class="col-lg-8 col-xs-6">
+				{% if flash.errors is not null %}
+	        		{% for error in flash.errors %}
+						<!--  -->
+	        			<div class="alert alert-danger alert-dismissable">
+		                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		                    <h4>	<i class="icon fa fa-check" ></i> Alert!</h4>
+		                    {{error}}
+		                </div>
+	        		{% endfor %}
+        		{% endif %}		
+				<div class="box box-primary">
+	                <div class="box-header with-border">
+	                  <h3 class="box-title">{{ "addchat"|trans }}</h3>
+	                </div><!-- /.box-header -->
+	                <!-- form start -->
+	                <form action="" id="friendlyChat"  method="POST" enctype="multipart/form-data">
+	                  <div class="box-body">
+	                  	
+	                    <div class="form-group">
+	                      <label for="firstname">{{ "name1"|trans }}</label>
+	                      <input value="{{retry.firstname}}" type="text" class="form-control" placeholder='{{ "firstname"|trans }}' id="firstname" name="firstname">
+	                    </div>
+	                    <div class="form-group">
+	                      <label for="lastname">{{ "name2"|trans }}</label>
+	                      <input value="{{retry.lastname}}" type="text" class="form-control" placeholder='{{ "firstname"|trans }}' id="lastname" name="lastname">
+	                    </div> 
+	                  </div><!-- /.box-body -->
+
+	                  <div class="box-footer">
+	                    <button class="btn btn-block btn-success btn-lg" id="frm_submit" type="submit">{{ "submit"|trans }}</button>
+	                  </div>
+	                </form>
+              	</div>
+			</div>
+		</div>
+	</section>
+<style>.image-sec {
+    position: absolute;
+    top: 25px;
+	left:25px;
+}
+.icon_but {
+    float: left;
+    height: 35px;
+    margin-right: 10px;
+    padding: 0 !important;
+	padding:0 10px;   
+}
+.btn-primary {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    color: #fff;
+}
+</style>
+<script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+<script language="javascript">
+$("#friendlyChat").submit(function(){
+
+	var firstName 	= 	$('#firstname').val();
+ 	var lastName 	= 	$('#lastname').val();
+ 	alert(lastName);
+  	// Initialize Firebase
+  	var config = {
+    	apiKey: "AIzaSyBDNVgZ_tRfMyTwzjgmGcvYJq3dL0q3hKo",
+    	authDomain: "project-d2a61.firebaseapp.com",
+    	databaseURL: "https://project-d2a61.firebaseio.com",
+    	storageBucket: "project-d2a61.appspot.com",
+    	messagingSenderId: "896033860582"
+  	};
+  	firebase.initializeApp(config);
+  	var database = firebase.database();
+  	var continentRef = firebase.database().ref('/messages/');  
+  	continentRef.on('value', function(snapshot) {
+	 	var data = snapshot.val();    
+	 	console.log(data);    
+  	});
+
+	var formData = new FormData($('form')[0]);
+    $.ajax({
+        url: '{{dirName}}/ajax/friendlychat-add.php', 
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {  
+        	if (data != ''  ) {
+        		alert("success");
+        	}
+        }        
+    });
+    return false;
+});
+</script>
+
+<script language="javascript" >
+$(document).ready(function(){
+    $('#frm_submit').click(function(){
+        var bSubmit = true;
+        $("input.required").each(function(){
+            var txtAttrb = $(this).val();
+            if(txtAttrb.length== 0)
+                {
+                   $(this).addClass("error-msg");
+                   bSubmit = false;
+            }
+        });
+		
+        if(bSubmit !== true)
+		{
+			return false;
+		}
+
+    });
+});
+</script>
+{% endblock %}

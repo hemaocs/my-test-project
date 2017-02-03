@@ -1,0 +1,29 @@
+{
+	"require": {
+		"monolog/monolog": "1.11.*@dev",
+		"slim/slim": "2.*",
+		"league/fractal": "~0.12",
+		"appsolute/push": "dev-master"
+	},
+	"autoload": {
+		"files": [
+			"libs/Redbean4.2.3/rb.php"
+		],
+		"psr-4": {
+			"Appsolute\\Config\\": "config",
+			"Appsolute\\Cron\\": "cron",
+			"Appsolute\\Cron\\Classes\\": "cron/Classes",
+			"Appsolute\\Cron\\Controllers\\": "cron/Controllers",
+			"Appsolute\\Cron\\Middlewares\\": "cron/Middlewares",
+			"Appsolute\\Cron\\Models\\": "cron/Models",
+			"Appsolute\\Cron\\Routes\\": "cron/Routes",
+			"Appsolute\\Cron\\Views\\": "cron/Views"
+	    }
+	},
+	"repositories": [
+        {
+            "type": "vcs",
+			"url": "https://appsolute-git.fr/kendryck/php-push-notification.git"
+        }
+	]
+}

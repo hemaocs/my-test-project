@@ -1,0 +1,9 @@
+site_name: Appsolute Backend v1
+pages:
+- [index.md, Home]
+- [getstarted.md, Get Started]
+- [configuration.md, Configuration]
+- [namespace.md, Namespaces]
+- [architecture.md, Architecture]
+- [errors.md, Errors management]
+theme: readthedocs

@@ -1,0 +1,92 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar">
+	  <!-- Sidebar user panel -->
+	  <div class="user-panel">
+	    <!-- <div class="pull-left image">
+	      <img style="background:#fff;" src="{{dirName}}/public/assets/img/vagone-logo.png" class="img-circle" alt="User Image">
+	    </div>
+	    <div class="pull-left info" style="padding-top:15px">
+	      <p  style="color:#fff;">{{session.user.firstname}}</p>
+	    </div> -->
+	  </div>
+	  <!-- sidebar menu: : style can be found in sidebar.less -->
+	  <ul class="sidebar-menu">
+	    <li class="header">MENU</li>
+	    <li class="{% if active_page == 'home' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/home">
+	        <i class="fa fa-dashboard"></i> <span>{{ "home"|trans }}</span>
+	      </a>
+	    </li>
+	    <li class="{% if active_page == 'users' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/users">
+	        <i class="fa fa-users"></i> <span>{{ "users"|trans }}</span>
+	      </a>
+	    </li>
+	    <li class="{% if active_page == 'categories' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/categories">
+	        <i class="fa fa-list-ul"></i> <span>{{ "category"|trans }}</span>
+	      </a>
+	    </li>
+	    <li class="{% if active_page == 'products' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/products">
+	        <i class="fa fa-list-ul"></i> <span>{{ "products"|trans }}</span>
+	      </a>
+	    </li>
+	    <li class="{% if active_page == 'calender' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/calender">
+	        <i class="fa fa-list-ul"></i> <span>{{ "Calender"|trans }}</span>
+	      </a>
+	    </li>
+	    <li class="{% if active_page == 'userchats' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/userchats">
+	        <i class="fa fa-list-ul"></i> <span>{{ "Userchat"|trans }}</span>
+	      </a>
+	    </li>
+	    <!-- <li class="treeview {% if active_page == 'categories' or active_page == 'products' or active_page == 'reserves'  %} active {% endif%}">
+          <a href="#">
+            <i class="fa fa-list-ul"></i>
+            <span>{{ "reserves"|trans }}</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+         <ul class="treeview-menu">
+            <li class="{% if active_page == 'categories' %} active {% endif%}"><a href="{{dirName_lang}}/categories"><i class="fa fa-circle-o"></i> {{ "category"|trans }}</a></li>
+            <li class="{% if active_page == 'products' %} active {% endif%}"><a href="{{dirName_lang}}/products"><i class="fa fa-circle-o"></i> {{ "products"|trans }}</a></li>
+             <li class="{% if active_page == 'reserves' %} active {% endif%}"><a href="{{dirName_lang}}/reserves"><i class="fa fa-circle-o"></i> 
+             	{{ "reserve_type"|trans }}</a></li>
+          </ul>
+        </li> -->
+        <!-- <li class="{% if active_page == 'recipes' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/recipes">
+	        <i class="fa fa-list-ul"></i> <span>{{ "recipes"|trans }}</span>
+	      </a>
+	    </li> -->
+	    <!-- <li class="{% if active_page == 'seasons' %} active {% endif%}">
+	      <a href="{{dirName_lang}}/seasons">
+	        <i class="fa fa-list-ul"></i> <span>{{ "seasons"|trans }}</span>
+	      </a>
+	    </li> -->
+	    
+	  </ul>
+	</section>
+	<!-- /.sidebar -->
+</aside>
+
+<!-- <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button ">
+	 <div class="mdl-layout__drawer mdl-color--blue-grey-800 mdl-color-text--blue-grey-50">
+		<header class="drawer-header mdl-color--blue-grey-900">
+          <span class="mdl-layout-title"><img src="{{dirName}}/public/assets/img/logo.png" alt="Weezl"/></span>
+        </header>
+		<nav class="mdl-navigation">
+		   <a class="mdl-navigation__link {% if active_page == 'home' %} active {% endif%}" href="{{dirName_lang}}/home">
+			  <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>
+			  {{ "home"|trans }}
+		   </a>
+		   <a class="mdl-navigation__link {% if active_page == 'users' %} active {% endif%}" href="{{dirName_lang}}/users">
+			  <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>
+			  {{ "users"|trans }}
+		   </a>		  
+		</nav>
+	 </div>
+  </div> -->
