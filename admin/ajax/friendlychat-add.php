@@ -5,8 +5,8 @@
 	$data['firstname']		=	$_POST['firstname'];
 	$data['lastname']	    = 	$_POST['lastname'];	
 
-		
-	$chatArray 			= 	array("chat_first"=>$_POST['firstname'],"chat_second"=>$_POST['lastname'] );  
+	$array              = 	array("chat_first"=>$_POST['firstname'],"chat_second"=>$_POST['lastname'] );
+	$chatArray 			= 	array("messages"=>$array );  
 	//print"<pre>";print_r($chatArray);exit();
 	$data_string = json_encode($chatArray);
 	$ch 		 = curl_init($url);
